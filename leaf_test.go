@@ -23,7 +23,10 @@ func TestOpen(t *testing.T) {
 		{"3. FAIL", "notfound.xlsx", errors.New("open notfound.xlsx: no such file or directory")},
 	}
 	for _, x := range table {
-		_, err := Open(x.File)
+		le, err := Open(x.File)
 		assert.EqualValues(t, fmt.Sprintf("%s", x.Exp), fmt.Sprintf("%s", err), x.Purpose)
+		if x.Exp == nil {
+			assert.NotNil(t, le, x.Purpose)
+		}
 	}
 }
