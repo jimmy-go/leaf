@@ -1,19 +1,27 @@
 package leaf
 
+import (
+	"regexp"
+	"strconv"
+)
+
 // IsFloat return true if s can be parsed as float.
 func IsFloat(s string) bool {
-	// TODO; implement
-	return false
+	_, err := strconv.ParseFloat(s, 32)
+	return err == nil
 }
 
-// IsInt return true if s can be parsed as integer.
-func IsInt(s string) bool {
-	// TODO; implement
-	return false
+// IsInteger return true if s can be parsed as integer.
+func IsInteger(s string) bool {
+	_, err := strconv.ParseInt(s, 10, 32)
+	return err == nil
 }
 
-// IsString return true if s can be parsed as string.
-func IsString(s string) bool {
-	// TODO; implement
-	return false
+var (
+	isLetterRegex = regexp.MustCompile(`\w`)
+)
+
+// IsLetter return true if s contains only letters a-zA-Z.
+func IsLetter(s string) bool {
+	return isLetterRegex.MatchString(s)
 }
