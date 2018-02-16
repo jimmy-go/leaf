@@ -1,15 +1,37 @@
 package leaf
 
+import (
+	"io"
+	"net/url"
+)
+
 // TODO; read file and fill matrix or map.
 
 // Open reads the specified file.
 func Open(name string) (*Leaf, error) {
-	// TODO; proposal: read file and fill data.
-	return nil, nil
+	var f io.ReadCloser
+	var err error
+
+	// Validate file is remote.
+	if u, er := url.Parse(name); er == nil && u.Scheme != "" {
+		f, err = openRemoteFile(name)
+		if err != nil {
+			return nil, err
+		}
+		return &Leaf{file: f}, nil
+	}
+
+	// Validate file is local.
+	f, err = openLocalFile(name)
+	if err != nil {
+		return nil, err
+	}
+	return &Leaf{file: f}, nil
 }
 
 // Leaf type.
 type Leaf struct {
+	file io.ReadCloser
 	book *Book
 }
 
